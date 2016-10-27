@@ -5,9 +5,9 @@ const DDOS_PROTECT_RESET_COUNT_TIME = 15; // in seconds (Время сброса
 
 $redis = new \Redis();
 $redis->connect('127.0.0.1', 6379);
-var_dump($redis->ping());
+
 $client_ip = $_SERVER['REMOTE_ADDR'];
-echo $client_ip;
+//echo $client_ip;
 //echo $_SERVER['REQUEST_URI'];
 $now_unix_time = time();
 
@@ -38,9 +38,13 @@ function RenderPageNoticeAndExit($reset_count_time) {
         </head>
         <body>
             <h1>Вы посылаете слишком много запросов! Подождите <span id="seconds">{$reset_count_time}</span> секунд.</h1>
+            <h2 id="notice"></h2>
         <script>
             setInterval(function() {
-                if(document.getElementById('seconds').innerHTML <= 0) location.reload();
+                if(document.getElementById('seconds').innerHTML <= 0){
+                    location.reload();
+                    document.getElementById('notice').innerHTML = "Если страница не перезагружается автоматически, то необходимо перезагрузить её вручную.";
+                }
                 else{
                     console.log(document.getElementById('seconds').innerHTML);
                     document.getElementById('seconds').innerHTML = document.getElementById('seconds').innerHTML - 1;    
